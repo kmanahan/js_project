@@ -25,14 +25,12 @@ const renderPost = (postHash) => {
     img.setAttribute('class', 'card')
 
     p.innerHTML = postHash.caption
-    
-    
 
     div.appendChild(p)
     div.appendChild(img)
     main.appendChild(div)
     postHash.comments.forEach(comment => renderComment(comment))
-}
+} 
 
 const renderComment = (comment) => {
     const ul = document.querySelector(`[data-id="${comment.post_id}"]`)
@@ -42,3 +40,37 @@ const renderComment = (comment) => {
 
     ul.appendChild(li)
 }
+
+
+const createPost = (event) => {
+    const postForm = document.createElement('container')
+    const button = document.createElement('button')
+    const input = document.createElement('input')
+    
+    button.setAttribute("class", "addPost")
+    button.innerHTML = "Create Post"
+    button.addEventListener('click')
+    
+    postForm.appendChild(button)
+    postForm.appendChild(input)
+    
+
+    
+    event.preventDefault()
+    const configObj ={
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        },
+        body: JSON.stringify({
+            caption: post.caption.value,
+            url: post.url.value, 
+        })
+    }
+
+    fetch(POST_URL, configObj)
+    .then(resp => resp.json())
+    .then(json => {renderPost(json)})
+}
+
