@@ -11,12 +11,19 @@ class PostsController < ApplicationController
 
     def create
         post = Post.new(post_params)
-        render json: post.save
+        post.save
+        render json: post
     end 
 
     def destroy 
         post = Post.find(params[:id])
         post.destroy
     end 
+
+    private 
+
+    def post_params
+        params.require(:post).permit(:caption, :url)
+    end
 end
 

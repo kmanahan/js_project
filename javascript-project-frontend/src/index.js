@@ -1,8 +1,12 @@
 const BASE_URL = "http://localhost:3000"
 const POSTS_URL = `${BASE_URL}/posts`
 const main = document.querySelector('main')
+let form = document.getElementById('add-post')
+
 
 document.addEventListener('DOMContentLoaded', () => loadPosts())
+
+form.addEventListener("submit", (e) => createPost(e))
 
 const loadPosts = () => {
     fetch(POSTS_URL)
@@ -16,7 +20,6 @@ const renderPost = (postHash) => {
     const div = document.createElement('div')
     const p = document.createElement('p')
     const img = document.createElement('img')
-    const ul = document.createElement('p')
 
     div.setAttribute('class', 'card')
     div.setAttribute('data-id', postHash.id)
@@ -42,35 +45,27 @@ const renderComment = (comment) => {
 }
 
 
-const createPost = (event) => {
-    const postForm = document.createElement('container')
-    const button = document.createElement('button')
-    const input = document.createElement('input')
-    
-    button.setAttribute("class", "addPost")
-    button.innerHTML = "Create Post"
-    button.addEventListener('click')
-    
-    postForm.appendChild(button)
-    postForm.appendChild(input)
-    
+const createPost = (e) => {
+    e.preventDefault()
+    const captionText = document.querySelector('#caption').value
+    const imageUrl = document.querySelector('#url').value
+    fetchPost(captionText, imageUrl)
+}
 
-    
-    event.preventDefault()
+function fetchPost(caption, url) {
+    const data = {caption, url}
+
     const configObj ={
         method: "POST",
         headers: {
             "Content-Type": "application/json",
             "Accept": "application/json"
         },
-        body: JSON.stringify({
-            caption: post.caption.value,
-            url: post.url.value, 
-        })
+        body: JSON.stringify(data)
     }
 
-    fetch(POST_URL, configObj)
+    fetch(POSTS_URL, configObj)
     .then(resp => resp.json())
-    .then(json => {renderPost(json)})
+    .then(json => {console.log(json)})
 }
 
