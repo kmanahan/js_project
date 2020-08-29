@@ -53,7 +53,7 @@ const createPost = (e) => {
 }
 
 function fetchPost(caption, url) {
-    const data = {caption, url}
+    const formData = {caption, url}
 
     const configObj ={
         method: "POST",
@@ -61,11 +61,11 @@ function fetchPost(caption, url) {
             "Content-Type": "application/json",
             "Accept": "application/json"
         },
-        body: JSON.stringify(data)
+        body: JSON.stringify(formData)
     }
 
     fetch(POSTS_URL, configObj)
     .then(resp => resp.json())
-    .then(json => {console.log(json)})
+    .then(json => {renderPost(json)})
 }
 
