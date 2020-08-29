@@ -20,18 +20,25 @@ const renderPost = (postHash) => {
     const div = document.createElement('div')
     const p = document.createElement('p')
     const img = document.createElement('img')
+    const button = document.createElement('button')
 
     div.setAttribute('class', 'card')
     div.setAttribute('data-id', postHash.id)
 
     img.setAttribute('src', postHash.url)
     img.setAttribute('class', 'card')
+    button.setAttribute('class', "delete")
+    button.setAttribute('data-id', postHash.id)
+    button.addEventListener('click', deletePost)
+    button.innerHTML = "Delete"
 
     p.innerHTML = postHash.caption
 
     div.appendChild(p)
     div.appendChild(img)
+    div.appendChild(button)
     main.appendChild(div)
+
     postHash.comments.forEach(comment => renderComment(comment))
 } 
 
@@ -67,5 +74,18 @@ function fetchPost(caption, url) {
     fetch(POSTS_URL, configObj)
     .then(resp => resp.json())
     .then(json => {renderPost(json)})
+}
+
+const deletePost = (e) => {
+    e.preventDefault()
+    const configObj = {
+        method:"DELETE",
+        headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        },
+    }
+        fetch(`${POSTS_URL}/${e.target.dataset.id}`, configObj)
+        e.target.parentElement.remove()
 }
 
