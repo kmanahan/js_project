@@ -7,29 +7,42 @@ const editButton = document.getElementsByClassName('update')
 
 document.addEventListener('DOMContentLoaded', () => {
     loadPosts()
-    displayEditForm()
 })
 
 form.addEventListener("submit", (e) => createPost(e))
-editForm.addEventListener("submit", (e) => editPost(e))
+// editForm.addEventListener("submit", (e) => editPost(e))
 
-let edit = false;
-function displayEditForm() {
-    edit = !edit
-    if (!edit) {
-        editForm.style.display = 'block';
-    } else {
-        editForm.style.display = 'none';
-    }
-}
-
-const loadPosts = () => {
+function loadPosts() {
     fetch(POSTS_URL)
-    .then(response => response.json())
-    .then(json => {
-        json.forEach(post => renderPost(post))
-    })
+        .then(res => res.json())
+        .then(posts => {
+            posts.data.forEach(post => {
+                const postMarkup = `
+                <div data-id=${post.id}>
+                  <h3>${post.title}</h3>
+                  <img src=${post.url} height="200" width="250">
+
+                  <button data-id=${post.id}>edit</button>
+                </div>
+                <br><br>`
+                document.querySelector(`#post-container`).innerHtml += postMarkup
+            })
+        });
 }
+
+// const loadPosts = () => {
+//     fetch(POSTS_URL)
+//     .then(response => response.json())
+    // .then(json => {
+    //     json.forEach(post => renderPost(post))
+    // })
+//     .then(posts => {
+//         posts.data.forEach(post => {
+//             const newPost = new Post(post.id, post.attributes)
+//             document.querySelector('#main').innerHTML += newPost.renderPostCard()
+//         })
+//     })
+// }
 
 const renderPost = (postHash) => {
     const div = document.createElement('div')
@@ -50,7 +63,7 @@ const renderPost = (postHash) => {
 
     updateButton.setAttribute('class', 'update')
     updateButton.setAttribute('data-id', postHash.id)
-    updateButton.addEventListener('click', displayEditForm)
+    updateButton.addEventListener('click', editPost)
     updateButton.innerHTML = 'Edit'
 
     
@@ -114,23 +127,26 @@ const deletePost = (e) => {
 
 
 const editPost = (e) => {
-    const captionText = document.querySelector('#edit-caption').value
-const imageUrl = document.querySelector('#edit-url').value
-updatePost(captionText, imageUrl)
+const post = parseInt(e.target.dataset.id)
+const captionText = e.target.querySelector('#edit-caption').value
+const imageUrl = e.target.querySelector('#edit-url').value
+const render = document.querySelector('#update-post')
+render.innerHTML = post.renderPost
+updatePost(post, captionText, imageUrl, render)
 }
 
 
-const updatePost = (e) => {
-    e.preventDefault()
-    console.log('update')
-    // const configObj = {
-    //     method:"PATCH",
-    //     headers: {
-    //         "Content-Type": "application/json",
-    //         "Accept": "application/json"
-    //     },
-    // }
-    //     fetch(`${POSTS_URL}/${e.target.dataset.id}`, configObj)
-    //     e.target.parentElement.update()
+function updatePost(post){
+    editHash = {post}
+    const configObj = {
+        method:"PATCH",
+        headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        },
+        body: JSON.stringify(editHash)
+    }
+    fetch(`${POST_URL}`, configObj)
+    .then(res => res.json())
+    .then(edited => console.log(edited))
 }
-

@@ -1,4 +1,5 @@
-class CommentSerializer < ActiveModel::Serializer
-  attributes :id, :comment, :post_id
+class CommentSerializer
+  include FastJsonapi::ObjectSerializer
+  attributes :comment, post_id 
   belongs_to :post
 end

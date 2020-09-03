@@ -1,7 +1,7 @@
 class PostsController < ApplicationController
     def index 
         posts = Post.all
-        render json: posts
+        render json: PostSerializer.new(posts)
     end 
 
     def show
