@@ -11,9 +11,8 @@ class Post {
     }
 
     renderPostCard() {
-        return `
-                <div data-id=${this.id}>
-                  <h3>${this.title}</h3>
+        return `<div data-id=${this.id}>
+                  <h3>${this.caption}</h3>
                   <img src=${this.url} height="200" width="250">
 
                   <button data-id=${this.id}>edit</button>
