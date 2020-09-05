@@ -12,13 +12,13 @@ class PostsController < ApplicationController
     def create
         post = Post.new(post_params)
         post.save
-        render json: post
+        render json: PostSerializer.new(post)
     end 
 
     def update 
         post = Post.find(params[:id])
         post.update(post_params)
-        render json: post
+        render json: PostSerializer.new(post)
     end 
 
     def destroy 
