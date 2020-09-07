@@ -173,7 +173,7 @@ function renderEdit() {
 
 
 const editPost = (e) => {
-   e.preventDefault()
+    e.preventDefault()
     const button = document.getElementById('edit')
     const id = button.dataset.id
     // const id = parseInt(e.target.dataset.id)
@@ -183,6 +183,25 @@ const editPost = (e) => {
     updatePost(post, captionText, imageUrl)
 }
 
+
+// function updatePost(post, caption, url){
+//     editHash = {caption, url}
+//     const configObj = {
+//         method:"PATCH",
+//         headers: {
+//             "Content-Type": "application/json",
+//             "Accept": "application/json"
+//         },
+//         body: JSON.stringify(editHash)
+//     }
+//     fetch(`${POSTS_URL}/${post.id}`, configObj)
+//     .then(res => res.json())
+//      .then(posts => {
+//       const post = posts.data
+//       let newPost = new Post(post, post.attributes)
+//                 newPost.loadPosts
+//             })
+// }
 
 function updatePost(post, caption, url){
     editHash = {caption, url}
@@ -196,9 +215,13 @@ function updatePost(post, caption, url){
     }
     fetch(`${POSTS_URL}/${post.id}`, configObj)
     .then(res => res.json())
-    .then(posted => console.log(posted))
-
+    .then(posts => {
+        const post = posts.data
+        let newPost = new Post(post, post.attributes)
+                  newPost.renderPostCard()
+              })
 }
+
 
 const deletePost = (e) => {
     const configObj = {
