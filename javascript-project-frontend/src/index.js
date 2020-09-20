@@ -21,7 +21,7 @@ function loadPosts() {
 }
 
 function commentHandler(e) {
-    e.preventDefault
+    e.preventDefault()
     const comment = document.querySelector('#comment').value
     fetchComment(comment)
 }
@@ -43,7 +43,7 @@ function fetchComment(comment) {
 }
 
 function createFormHandler(e) {
-    e.preventDefault() 
+    // e.preventDefault() 
     const caption = document.querySelector('#caption').value
     const url = document.querySelector('#url').value
     fetchPost(caption, url)
@@ -156,6 +156,7 @@ function updatePost(post, card){
         card.querySelector('h3').innerHTML = newCaption
         card.querySelector('#post-url').src = newUrl
         console.log('success', postData)
+
         // postData.data.attributes.caption = newCaption
 
         // const p = data.data.id
