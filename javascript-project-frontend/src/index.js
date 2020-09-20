@@ -1,5 +1,6 @@
 const BASE_URL = "http://localhost:3000"
 const POSTS_URL = `${BASE_URL}/posts`
+const COMMENTS_URL = `${BASE_URL}/comments`
 
 document.addEventListener('DOMContentLoaded', () => {
     loadPosts() 
@@ -17,6 +18,28 @@ function loadPosts() {
                 newPost.renderPostCard()
             })
         });
+}
+
+function commentHandler(e) {
+    e.preventDefault
+    const comment = document.querySelector('#comment').value
+    fetchComment(comment)
+}
+
+function fetchComment(comment) {
+    let data = {comment}
+    const configObj = {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"},
+        body: JSON.stringify(data)
+}
+    fetch(COMMENTS_URL, configObj)   
+    .then(resp => resp.json())
+    .then(comments => {
+      const c = comments.data
+      let newComment = new Comment(c)
+            })
 }
 
 function createFormHandler(e) {
@@ -44,167 +67,78 @@ const configObj = {
             })
 }
 
-
-// function render(postData) {
-//     const postMarkup = 
-//       `
-//                 <div data-id=${postData.id}>
-//                   <h3>${postData.attributes.caption}</h3>
-//                   <img src=${postData.attributes.url} height="200" width="250">
-//                   <p>${postData.attributes.comments}
-//                   <button data-id=${postData.id}>edit</button>
-//                 </div>
-//                 <br><br>`
-//                 document.querySelector(`#post-container`).innerHtml += postMarkup
-// }
-// const loadPosts = () => {
-//     fetch(POSTS_URL)
-//     .then(response => response.json())
-    // .then(json => {
-    //     json.forEach(post => renderPost(post))
-    // })
-//     .then(posts => {
-//         posts.data.forEach(post => {
-//             const newPost = new Post(post.id, post.attributes)
-//             document.querySelector('#main').innerHTML += newPost.renderPostCard()
-//         })
-//     })
-// }
-
-// const renderPosts = (postHash) => {
-
-//     const main = document.querySelector('main')
+// function renderEdit(e) {
+//     const id = e.target.dataset.id
 //     const div = document.createElement('div')
-//     const p = document.createElement('p')
-//     const img = document.createElement('img')
+//     const h3 = document.createElement('h3')
+//     const cap = document.createElement('p')
+//     const u = document.createElement('p')
+//     // const capInput = document.createElement('input')
+//     // const urlInput = document.createElement('input')
+//     // urlInput.setAttribute('class', 'edit-url')
+//     // capInput.setAttribute('class', 'edit-caption')
+//     const capInput = document.getElementById('edit-caption')
+//     const urlInput = document.getElementById('edit-url')
+    
 //     const button = document.createElement('button')
-//     const updateButton = document.createElement('button')
-  
-//     div.setAttribute('class', 'card')
-//     div.setAttribute('data-id', postHash.id)
 
-//     img.setAttribute('src', postHash.url)
-//     img.setAttribute('class', 'card')
-//     button.setAttribute('class', "delete")
-//     button.setAttribute('data-id', postHash.id)
-//     button.addEventListener('click', deletePost)
-//     button.innerHTML = 'Delete'
+//     h3.innerHTML = 'Edit Post'
+//     cap.innerHTML = 'caption'
+//     u.innerHTML = 'image url'
+//     capInput.innerText = this.caption
+//     urlInput.src = this.url
 
-//     updateButton.setAttribute('class', 'update')
-//     updateButton.setAttribute('data-id', postHash.id)
-//     updateButton.addEventListener('click', editPost)
-//     updateButton.innerHTML = 'Edit'
-
-    
-//     p.innerHTML = postHash.caption
-
-//     div.appendChild(p)
-//     div.appendChild(img)
-//     div.appendChild(button)
-//     div.appendChild(updateButton)
-//     main.appendChild(div)
-  
-//     postHash.comments.forEach(comment => renderComment(comment))
-// } 
-
-// const renderComment = (comment) => {
-//     const ul = document.querySelector(`[data-id="${comment.post_id}"]`)
-//     const li = document.createElement('li')
-
-//     li.innerHTML = `${comment.comment}`
-
-//     ul.appendChild(li)
+//     button.id = 'submit-edit'
+//     button.innerText = 'submit'
+//     button.dataset.id = this.id 
+//     // button.addEventListener('submit', editPost)
+//     div.append(h3,cap,capInput,u,urlInput,button)
+//     div.dataset.id = this.id
+//     const container = document.querySelector('#edit-container')
+//     container.append(div)
+//     const post = Post.findById(id)
+//     editPost(post)
 // }
 
-
-// const createPost = (e) => {
-//     e.preventDefault()
-//     const captionText = document.querySelector('#caption').value
-//     const imageUrl = document.querySelector('#url').value
-//     fetchPost(captionText, imageUrl)
+// function editPost(post) {
+//     debugger
+//     const captionText = document.getElementById('edit-caption').value
+//     const imageUrl = document.getElementById('edit-url').value
+//     updatePost(post, captionText, imageUrl)
 // }
 
-// function fetchPost(caption, url) {
-//     const formData = {caption, url}
-
-//     const configObj ={
-//         method: "POST",
-//         headers: {
-//             "Content-Type": "application/json",
-//             "Accept": "application/json"
-//         },
-//         body: JSON.stringify(formData)
-//     }
-
-//     fetch(POSTS_URL, configObj)
-//     .then(resp => resp.json())
-//     .then(json => {renderPost(json)})
-// }
-function renderEdit() {
-    const div = document.createElement('div')
-    const h3 = document.createElement('h3')
-    const cap = document.createElement('p')
-    const u = document.createElement('p')
-    // const capInput = document.createElement('input')
-    // const urlInput = document.createElement('input')
-    // urlInput.setAttribute('class', 'edit-url')
-    // capInput.setAttribute('class', 'edit-caption')
-    const capInput = document.getElementById('edit-caption')
-    const urlInput = document.getElementById('edit-url')
-    
-    const button = document.createElement('button')
-
-    h3.innerHTML = 'Edit Post'
-    cap.innerHTML = 'caption'
-    u.innerHTML = 'image url'
-    capInput.innerText = this.caption
-    urlInput.src = this.url
-
-    button.innerText = 'submit'
-    button.dataset.id = this.id 
-    button.addEventListener('click',editPost)
-    div.append(h3,cap,capInput,u,urlInput,button)
-    div.dataset.id = this.id
-    const container = document.querySelector('#edit-container')
-    container.append(div)
-    
-}
-
-
-
-const editPost = (e) => {
+function editPost(e) {
     e.preventDefault()
-    const button = document.getElementById('edit')
-    const id = button.dataset.id
-    // const id = parseInt(e.target.dataset.id)
+    const newCaption = e.target.querySelector('#edit-caption').value
+    const newUrl = e.target.querySelector('#edit-image').value 
+    const card = e.target.parentElement
+    const id = e.target.dataset.id
     const post = Post.findById(id)
-    const captionText = document.getElementById('edit-caption').value
-    const imageUrl = document.getElementById('edit-url').value
-    updatePost(post, captionText, imageUrl)
+    post.caption = newCaption
+    post.url = newUrl
+    // debugger
+    // let caption = card.childNodes[0].innerText
+    updatePost(post, card)
 }
 
-
-// function updatePost(post, caption, url){
-//     editHash = {caption, url}
-//     const configObj = {
-//         method:"PATCH",
-//         headers: {
-//             "Content-Type": "application/json",
-//             "Accept": "application/json"
-//         },
-//         body: JSON.stringify(editHash)
-//     }
-//     fetch(`${POSTS_URL}/${post.id}`, configObj)
-//     .then(res => res.json())
-//      .then(posts => {
-//       const post = posts.data
-//       let newPost = new Post(post, post.attributes)
-//                 newPost.loadPosts
-//             })
+// const editPost = (e) => {
+    // e.preventDefault()
+    // const button = document.getElementById('edit')
+    // const id = button.dataset.id
+    // const post = Post.findById(id)
+    // const captionText = document.getElementById('edit-caption').value
+    // const imageUrl = document.getElementById('edit-url').value
+    // const post = e.id 
+    // const captionText = e.caption
+    // const imageUrl = e.url 
+    // const post = e 
+    // updatePost(captionText, imageUrl)
+    // updatePost(post)
 // }
 
-function updatePost(post, caption, url){
-    editHash = {caption, url}
+
+function updatePost(post, card){
+    editHash = {post, card}
     const configObj = {
         method:"PATCH",
         headers: {
@@ -212,14 +146,31 @@ function updatePost(post, caption, url){
             "Accept": "application/json"
         },
         body: JSON.stringify(editHash)
+        
     }
     fetch(`${POSTS_URL}/${post.id}`, configObj)
     .then(res => res.json())
-    .then(posts => {
-        const post = posts.data
-        let newPost = new Post(post, post.attributes)
-                  newPost.renderPostCard()
-              })
+    .then(postData => {
+        const newCaption = card.querySelector('#edit-caption').value 
+        const newUrl = card.querySelector('#edit-image').value 
+        card.querySelector('h3').innerHTML = newCaption
+        card.querySelector('#post-url').src = newUrl
+        console.log('success', postData)
+        // postData.data.attributes.caption = newCaption
+
+        // const p = data.data.id
+        // const captionText = document.getElementById('edit-caption').value
+        // const imageUrl = document.getElementById('edit-url').value
+        // let pcaption = post.data.attributes.caption 
+        // let purl = post.data.attributes.url 
+        // let pcaption = p.caption 
+        // let purl = p.url 
+        // pcaption = captionText
+        // purl = imageUrl
+        // document.querySelector('#post-caption').innerHTML = newCaption
+        // document.querySelector('#post-url').src = imageUrl
+    })
+              .catch(err => { console.log(err) })
 }
 
 
@@ -234,3 +185,4 @@ const deletePost = (e) => {
         fetch(`${POSTS_URL}/${e.target.dataset.id}`, configObj)
         e.target.parentElement.remove()
 }
+

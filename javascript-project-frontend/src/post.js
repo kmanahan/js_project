@@ -11,15 +11,19 @@ class Post {
         return this.all.find(post => post.id === id);
     }
 
-
-
     renderPostCard() {
         const div = document.createElement('div')
         const h3 = document.createElement('h3')
         const url = document.createElement('img')
         const ul = document.createElement('ul')
         const button = document.createElement('button')
-        const eButton = document.createElement('button')
+        const addButton = document.createElement('button')
+        const commentInput = document.createElement('input')
+        const form = document.createElement('form')
+        const input = document.createElement('input')
+        const inputUrl = document.createElement('input')
+        const eButton = document.createElement('input')
+       
 
         this.comments.forEach(c => {
             const li = document.createElement('li')
@@ -27,65 +31,61 @@ class Post {
             ul.appendChild(li)
         }) 
 
+        div.id = 'posts-card'
+        div.dataset.id = this.id 
+        
         h3.innerText = this.caption
+        h3.id = 'post-caption'
         url.src = this.url 
-
-        eButton.innerText = 'edit'
-        eButton.id = 'edit'
-        eButton.dataset.id = this.id 
-        eButton.addEventListener('click', renderEdit)
+        url.id = 'post-url'
 
         button.innerText = 'delete'
         button.dataset.id = this.id 
         button.id = 'delete'
         button.addEventListener('click', deletePost)
 
-        div.append(h3,url,ul,button,eButton)
-        div.dataset.id = this.id
-        const container = document.querySelector('#post-container')
+        commentInput.dataset.id = this.id
+        commentInput.id = 'comment'
 
-        container.append(div)
+        addButton.innerText = 'add a comment'
+        addButton.dataset.id = this.id 
+        addButton.id = 'add'
+        addButton.addEventListener('click', commentHandler)
 
-      }
-      
-       renderPostCard() {
-        const div = document.createElement('div')
-        const h3 = document.createElement('h3')
-        const url = document.createElement('img')
-        const ul = document.createElement('ul')
-        const button = document.createElement('button')
-        const eButton = document.createElement('button')
+        form.dataset.id = this.id
+        form.id = 'edit-form'
+        form.addEventListener('submit', editPost)
 
-        this.comments.forEach(c => {
-            const li = document.createElement('li')
-            li.innerHTML = c.comment
-            ul.appendChild(li)
-        }) 
+        input.placeholder = 'edit caption'
+        input.id = 'edit-caption'
+        input.type = 'text'
+        input.name = 'caption'
 
-        h3.innerText = this.caption
-        url.src = this.url 
+        inputUrl.placeholder = 'edit image'
+        inputUrl.id = 'edit-image'
+        inputUrl.type = 'text'
+        inputUrl.name = 'image'
 
-        eButton.innerText = 'edit'
+        eButton.value = 'edit'
         eButton.id = 'edit'
+        eButton.type = 'submit'
+        eButton.class = 'input-text'
+        eButton.name = 'submit-edit'
         eButton.dataset.id = this.id 
-        eButton.addEventListener('click', renderEdit)
+        
 
-        button.innerText = 'delete'
-        button.dataset.id = this.id 
-        button.id = 'delete'
-        button.addEventListener('click', deletePost)
+        form.appendChild(input)
+        form.appendChild(inputUrl)
+        form.appendChild(eButton)
 
-        div.append(h3,url,ul,button,eButton)
+        div.append(h3,url,ul,commentInput,addButton,form,button)
         div.dataset.id = this.id
         const container = document.querySelector('#post-container')
 
         container.append(div)
 
       }
-    
-
-    
- 
+       
 }
 
 Post.all = []
